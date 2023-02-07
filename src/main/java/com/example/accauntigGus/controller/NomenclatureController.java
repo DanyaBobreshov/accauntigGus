@@ -15,47 +15,52 @@ import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
-public class NomenclatureController{
+public class NomenclatureController {
+
     private final NomenclatureService nomenclatureService;
     private final UserService userService;
 
-    @GetMapping("/nomenclaturs")
-    public String getNomenclaturs(Principal principal, Model model,
-                                  @RequestParam(name = "searchWord", required = false) String title){
+    @GetMapping("/allNomenclature")
+    public String getAllNomenclatures(Principal principal, Model model,
+                                      @RequestParam(name = "searchWord", required = false) String title) {
         model.addAttribute("user", userService.getUserByPrincipal(principal));
-        model.addAttribute("nomenclaturs", nomenclatureService.list(title);
+        model.addAttribute("nomenclatures", nomenclatureService.list(title));
         model.addAttribute("searchWord", title);
-        return "allNomenclaturs";
+        return "allNomenclature";
     }
 
-    @GetMapping ("/addNomenclatur")
-    public String getAddNomenclatur(Principal principal, Model model){
+    @GetMapping("/addNomenclature")
+    public String getAddNomenclature(Principal principal, Model model) {
         model.addAttribute("user", userService.getUserByPrincipal(principal));
-        return "addNomenclaturs";
+        return "addNomenclatures";
     }
 
-    @PostMapping("/addNomenclatur")
-        public String postAddNomenclatur(@RequestParam("Nomenclature") Nomenclature nomenclature){
-            nomenclatureService.save(nomenclature);
-            return "redirect:/allNomenclaturs";
+    @PostMapping("/addNomenclature")
+    public String postAddNomenclature(@RequestParam("nomenclatureTitle") String title) {
+        nomenclatureService.save(title);
+        return "redirect:/allNomenclature";
+    }
 
-            @GetMapping("/editNomenclature/{id}")
-                public String getEditNomenclature(@PathVariable("id") Long id, Model model, Principal principal){
-                    Nomenclature nomenclature = nomenclatureService.findById(id);
-                    model.addAtribute("user", userService.getUserByPrincipal(principal));
-                    model.addAtribute("nomenclature", nomenclature);
-                    return "editNomenclature";
-                }
+    @GetMapping("/editNomenclature/{id}")
+    public String getEditNomenclature(@PathVariable("id") Long id, Model model,
+                                      Principal principal) {
+        Nomenclature nomenclature = nomenclatureService.findById(id);
+        model.addAttribute("user", userService.getUserByPrincipal(principal));
+        model.addAttribute("nomenclature", nomenclature);
+        return "editNomenclature";
+    }
 
-                @PostMapping("/editNomenclature/{id}"){
-                    public String postEditNomenclature(@PathVariable("id"), @RequestParam("title") String title){
-                        Nomenclature nomenclature = nomenclatureService.findById(id);
-                        nomenclatureService.correct(nomenclature, title);
-                        return "redirect:/allNomenclaturs";
-                    }
+    @PostMapping("/editNomenclature/{id}")
+    public String postEditNomenclature(@PathVariable("id") Long id, @RequestParam("title") String title) {
+        Nomenclature nomenclature = nomenclatureService.findById(id);
+        nomenclatureService.correct(nomenclature, title);
+        return "redirect:/allNomenclature";
+    }
 
-                    @PostMapping("deleteNomenclature/{id}"){
-                        public String delete(@PathVariable("id") Long id){
-                            nomenclatureService.deleteById(id);
-                            return "redirect:/allNomenclaturs";
-                        }
+    @PostMapping("deleteNomenclature/{id}")
+    public String delete(@PathVariable("id") Long id) {
+        nomenclatureService.deleteById(id);
+        return "redirect:/allNomenclature";
+    }
+
+}

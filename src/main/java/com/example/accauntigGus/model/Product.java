@@ -1,21 +1,25 @@
 package com.example.accauntigGus.model;
 
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
 @NoArgsConstructor
-public class Nomenclature {
+
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-}
 
+    private String title;
+    private String module;
+    private String comment;
+    private Long year;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn
+    private Nomenclature nomenclature;
+}

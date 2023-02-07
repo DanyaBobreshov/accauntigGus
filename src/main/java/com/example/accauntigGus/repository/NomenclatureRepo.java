@@ -8,7 +8,10 @@ import java.util.Optional;
 
 public interface NomenclatureRepo extends JpaRepository<Nomenclature, Long> {
     List<Nomenclature> findByTitleContains(String title);
+
     Optional<Nomenclature> findByTitle(String title);
-    void deleteByTitle (String title);
-    void deleteById (Long id);
+
+    void deleteByTitle(String title);
+
+    void deleteById(Long id);
 }
