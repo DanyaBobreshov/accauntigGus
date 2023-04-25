@@ -19,16 +19,15 @@ public class Akt {
 
     @ManyToOne(fetch= FetchType.LAZY)
     @JoinColumn
-    private Regiment base;
+    private Regiment regiment;
 
     private String industrial;
     private String contract;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    @JoinTable(name="akts_products_in_regiment",
+    @JoinTable(name="akts_products_numbers",
             joinColumns = @JoinColumn(name="akt_id"),
-            inverseJoinColumns = @JoinColumn(name="product_id"))
-    private List<ProductsInRegiment> productsInRegiments;
-
+            inverseJoinColumns = @JoinColumn(name="product_numbers_id"))
+    private List<ProductNumber> productNumbers;
 
 }

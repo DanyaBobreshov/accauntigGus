@@ -1,6 +1,7 @@
 package com.example.accauntigGus.service;
 
 import com.example.accauntigGus.model.Akt;
+import com.example.accauntigGus.model.ProductNumber;
 import com.example.accauntigGus.model.ProductsInRegiment;
 import com.example.accauntigGus.model.Regiment;
 import com.example.accauntigGus.repository.AktRepo;
@@ -48,24 +49,41 @@ public class AktService implements UniService<Akt>{
         aktRepo.deleteById(id);
     }
 
-    public Akt save(LocalDate date, Long regimentId, String contract, List<Long> productsId){
-        Akt akt=new Akt();
+    public Akt save(LocalDate date, Long regimentId, String contract, List<ProductNumber> productNumbers){
+        Akt akt = new Akt();
         akt.setDate(date);
         Regiment regiment=regimentService.findById(regimentId);
-        akt.setBase(regiment);
+        akt.setRegiment(regiment);
         akt.setContract(contract);
-        List<ProductsInRegiment>productsInRegimentList=new LinkedList<>();
-        for(Long productId:productsId){
-            ProductsInRegiment productInRegiment;
-            if(productInRegimentService.findByProductAndRegiment(regimentId, productId)==null){
-                productInRegiment= new ProductsInRegiment();
-                productInRegiment.setRegiment(regiment);
-                productInRegiment.setProduct(productService.findById(productId));
-            }
+        akt.setProductNumbers(productNumbers);
+        for(ProductNumber pn:productNumbers){
+            productInRegimentService.correctUp(regimentId, pn.getProduct().getId(), pn.getNumber());
         }
-        akt.setProductsInRegiments(productsInRegimentList);
-        aktRepo.save(akt);
+        saveEntity(akt);
         return akt;
     }
 
-}
+    public Akt correct(Long id, LocalDate date, Long regimentId, String contract, List<ProductNumber> productNumbers){
+        Akt akt=this.findById(id);
+        if(akt==null) {
+            return null;
+        }
+            Long oldRegId=akt.getRegiment().getId();
+            List<ProductNumber> oldProdNum=akt.getProductNumbers();
+            for(ProductNumber pn:oldProdNum){
+                productInRegimentService.correctDown(oldRegId, pn.getProduct().getId(), pn.getNumber());
+            }
+            akt.setDate(date);
+            Regiment regiment=regimentService.findById(regimentId);
+            akt.setRegiment(regiment);
+            akt.setContract(contract);
+            akt.setProductNumbers(productNumbers);
+            for(ProductNumber pn:productNumbers){
+                productInRegimentService.correctUp(regimentId, pn.getProduct().getId(), pn.getNumber());
+            }
+            saveEntity(akt);
+            return akt;
+        }
+
+
+    }
