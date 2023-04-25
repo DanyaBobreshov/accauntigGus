@@ -1,7 +1,6 @@
 package com.example.accauntigGus.service;
 
 import com.example.accauntigGus.model.Akt;
-import com.example.accauntigGus.model.Product;
 import com.example.accauntigGus.model.ProductsInRegiment;
 import com.example.accauntigGus.model.Regiment;
 import com.example.accauntigGus.repository.AktRepo;

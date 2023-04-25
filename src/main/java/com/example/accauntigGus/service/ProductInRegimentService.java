@@ -67,6 +67,20 @@ public class ProductInRegimentService implements UniService<ProductsInRegiment> 
         productsInRegimentRepo.save(productsInRegiment);
     }
 
+    public void correctUp(Long regimentId, Long productId, Long numbers){
+        ProductsInRegiment productInRegiment=productsInRegimentRepo.findByRegimentIdAndProductId(regimentId, productId).orElse(null);
+        if(productInRegiment==null) productInRegiment=new ProductsInRegiment();
+        productInRegiment.setNumbers(productInRegiment.getNumbers()+numbers);
+        saveEntity(productInRegiment);
+    }
+
+    public void correctDown(Long regimentId, Long productId, Long numbers){
+        ProductsInRegiment productInRegiment=productsInRegimentRepo.findByRegimentIdAndProductId(regimentId, productId).orElse(null);
+        if(productInRegiment==null) productInRegiment=new ProductsInRegiment();
+        productInRegiment.setNumbers(productInRegiment.getNumbers()-numbers);
+        saveEntity(productInRegiment);
+    }
+
 
 
 }
